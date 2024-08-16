@@ -1,0 +1,27 @@
+[package]
+name = "oxidebot_example"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+onebot_v11_oxidebot = "0.1.0"
+oxidebot = "0.1.0"
+tokio = { version = "1.39.2", features = ["full"] }
+tracing-subscriber = "0.3.18"
+tracing = "0.1.40"
+url = "2.5.2"
+reqwest = "0.12.5"
+sqlx = { version = "0.8.0", features = ["runtime-tokio", "sqlite"] }
+tokio_schedule = "0.3.2"
+anyhow = "1.0.86"
+onebot_v11 = "0.1.2" 
+futures = "0.3.30"
+dashmap = "6.0.1"
+
+[profile.release]
+lto = true
+strip = true
+opt-level = "z"   # Optimize for size.
+codegen-units = 1
+panic = "abort"                 
+
