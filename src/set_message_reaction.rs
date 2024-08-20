@@ -112,7 +112,9 @@ impl SetMessageEventReactionHandler {
             if text.starts_with("/cancel action") {
                 self_clone.remove_target(user_id.as_str()).await?;
                 if let Err(e) = matcher
-                    .try_reply_message(vec![MessageSegment::text("Cancel reaction to your message")])
+                    .try_reply_message(vec![MessageSegment::text(
+                        "Cancel reaction to your message",
+                    )])
                     .await
                 {
                     tracing::error!("send message failed: {:?}", e);
@@ -124,7 +126,13 @@ impl SetMessageEventReactionHandler {
 
     pub async fn handle_reaction(&self, bot: BotObject, event: &MessageEvent) {
         if self.check_target(&event.sender.id).await {
-            match event.set_reactions(bot, vec!["201".to_string()]).await {
+            let reactions = match bot.server() {
+                "onebot_v11" => vec!["201".to_string()],
+                "telegram" => vec!["👍".to_string()],
+                _ => vec!["201".to_string()],
+            };
+
+            match event.set_reactions(bot, reactions).await {
                 Ok(_) => {}
                 Err(e) => {
                     tracing::error!("set reaction failed: {:?}", e);
