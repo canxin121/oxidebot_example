@@ -30,7 +30,7 @@ impl ActiveHandlerTrait for ScheduleHandler {
     {
         Box::pin(async {
             async fn send_message() -> Result<()> {
-                let bot = get_bot("123456789")
+                let bot = get_bot("onebot_v11","123456789")
                     .await
                     .ok_or(anyhow::anyhow!("get bot failed"))?;
                 bot.send_message(

@@ -1113,9 +1113,9 @@ checksum = "b15813163c1d831bf4a13c3610c05c0d03b39feb07f7e09fa234dac9b15aaf39"
 
 [[package]]
 name = "oxidebot"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89a7a770f44d6b6810bf05a953aa0b517ca284f2fe65914fbff38114fe5e5811"
+checksum = "c07e745ef9fc3b7a078807f976091c51210287f6cae35ca10f5fb256dfeb6a92"
 dependencies = [
  "anyhow",
  "async-trait",
