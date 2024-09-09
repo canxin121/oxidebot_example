@@ -2,9 +2,9 @@ use onebot_v11::connect::ws_reverse::ReverseWsConfig;
 use onebot_v11_oxidebot::OnebotV11ReverseWsBot;
 
 use oxidebot_example::{
-    echo::EchoHandler, interaction::InteractionHandler, print::PrintHandler,
+    echo::EchoHandler, filer::MessageEventFilter, print::PrintHandler,
     qq_special::QQSpecialHandler, schedule::ScheduleHandler,
-    set_message_reaction::SetMessageEventReactionHandler,
+    set_message_reaction::SetMessageEventReactionHandler, wait::WaitHandler,
 };
 use telegram_bot_oxidebot::bot::TelegramBot;
 
@@ -23,7 +23,7 @@ async fn main() {
         .bot(TelegramBot::new("token".to_string(), Default::default()).await)
         .await
         // A pre-event filter for globally controlling event handling
-        // .filter(MessageEventFilter)
+        .filter(MessageEventFilter)
         // /echo repeat message
         .handler(EchoHandler)
         .handler(PrintHandler)
@@ -33,8 +33,8 @@ async fn main() {
         .handler(ScheduleHandler)
         // QQ special function, friend praise
         .handler(QQSpecialHandler)
-        // An example interactive plugin
-        .handler(InteractionHandler::new());
+        // Wait example plugin
+        .wait_handler(|s| WaitHandler::new(s));
 
     manager.run_block().await;
 }

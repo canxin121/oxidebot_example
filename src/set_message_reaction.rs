@@ -2,9 +2,10 @@ use std::path::Path;
 use std::sync::Arc;
 
 use anyhow::Result;
+use oxidebot::bot::BotObject;
 use oxidebot::{
     event::MessageEvent, handler::Handler, matcher::Matcher, source::message::MessageSegment,
-    BotObject, EventHandlerTrait,
+    EventHandlerTrait,
 };
 use sqlx::sqlite::SqlitePool;
 use sqlx::{query, query_as};
@@ -26,11 +27,19 @@ impl Into<Handler> for SetMessageEventReactionHandler {
 
 impl SetMessageEventReactionHandler {
     pub async fn new(file_path: &str) -> SetMessageEventReactionHandler {
+        let path = Path::new(file_path);
+        let exist = path.exists();
+        if path.parent().is_none() {
+            // create all
+            std::fs::create_dir_all(path.parent().unwrap()).expect("Failed to create dir");
+        }
+        if !exist {
+            std::fs::File::create(path).expect("Failed to create file");
+        }
         let pool = SqlitePool::connect(file_path)
             .await
             .expect("Failed to create pool");
-
-        if !Path::new(file_path).exists() {
+        if !exist {
             query(
                 "CREATE TABLE reactions (
                     user_id TEXT PRIMARY KEY,
